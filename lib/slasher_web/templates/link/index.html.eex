@@ -1,0 +1,30 @@
+<h1>Listing Link</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Long url</th>
+      <th>Short url</th>
+      <th>Date</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for link <- @links do %>
+    <tr>
+      <td><%= link.long_url %></td>
+      <td><%= link.short_url %></td>
+      <td><%= link.date %></td>
+
+      <td>
+        <%= link "Show", to: Routes.link_path(@conn, :show, link) %>
+        <%= link "Edit", to: Routes.link_path(@conn, :edit, link) %>
+        <%= link "Delete", to: Routes.link_path(@conn, :delete, link), method: :delete, data: [confirm: "Are you sure?"] %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Link", to: Routes.link_path(@conn, :new) %></span>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Slash!</title>
+    </head>
+    <body>
+        <section class="phx-hero">
+            <h1><%= gettext "Welcome to %{name}!", name: "Slash!" %></h1>
+            <p>Slash is an URL shortener!<br/><%= link "Sign up ", to: Routes.user_path(@conn, :new) %>or
+                <%= link "Login ", to: Routes.session_path(@conn, :new) %>to shorten your URLs.</p>
+        </section>
+    </body>
+</html>
+
+<section class= "center">
+  <p>Built with <a href="https://github.com/elixir-lang/elixir">Elixir 1.8.1</a>
+  and <a href="https://github.com/phoenixframework/phoenix">Phoenix 1.4.1</a> </p>
+</section>
