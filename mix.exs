@@ -20,7 +20,8 @@ defmodule Slasher.MixProject do
   def application do
     [
       mod: {Slasher.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools],
+      mod: {SlasherCode, []}
     ]
   end
 

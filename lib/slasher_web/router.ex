@@ -1,13 +1,15 @@
 defmodule SlasherWeb.Router do
   use SlasherWeb, :router
 
+  alias SlasherWeb.Auth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug SlasherWeb.Auth
+    plug Auth
   end
 
   pipeline :api do
@@ -18,8 +20,9 @@ defmodule SlasherWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    get "/users", UserController, :index
-    get "users/:id", UserController, :show
+    get "/sign-up", UserController, only: [:new, :create]
+    post "/login", SessionController, only: [:create, :new]
+    delete "/logout", SessionController, :delete
     resources "/users", UserController
     resources "/sessions", SessionController
   end

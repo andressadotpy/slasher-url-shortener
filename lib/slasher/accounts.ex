@@ -11,8 +11,8 @@ defmodule Slasher.Accounts do
   end
 
   def list_users do
-    Repo.all(:user)
-    |> Repo.preload(:credential)
+    Users
+    |> Repo.all()
   end
 
   def get_user!(id) do

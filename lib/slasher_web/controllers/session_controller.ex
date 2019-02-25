@@ -1,6 +1,8 @@
 defmodule SlasherWeb.SessionController do
   use SlasherWeb, :controller
 
+  alias SlasherWeb.Router.Helpers, as: Routes
+
   # renders login form
   def new(conn, _) do
     render(conn, "new.html")
