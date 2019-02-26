@@ -23,6 +23,6 @@ defmodule Slasher.Accounts.User do
   def registration_changeset(user, attrs) do
     user
     |> changeset(attrs)
-    |> cast_assoc(:credential, with: &Credential.changeset/2, required: true)
+    |> cast_assoc(:credential, with: &Credential.registration_changeset/2, required: true)
   end
 end

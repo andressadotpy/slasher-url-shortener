@@ -30,7 +30,6 @@ defmodule Slasher.Accounts.Credential do
     |> validate_length(:password, min: 8)
     |> validate_confirmation(:password)
     |> hash_password()
-    |> Repo.insert()
   end
 
   def hash_password(%{valid?: false} = changeset), do: changeset

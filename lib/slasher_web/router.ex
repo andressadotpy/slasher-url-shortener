@@ -21,4 +21,12 @@ defmodule SlasherWeb.Router do
     resources "/users", UserController, only: [:index, :show, :new, :create]
     resources "/sessions", SessionController, only: [:new, :create, :delete]
   end
+
+  scope "/slasher", SlasherWeb do
+    pipe_through :browser
+
+    get "/new", LinkController, :new
+    get "/:id", LinkController, :show
+    post "/", LinkController, :create
+  end
 end
