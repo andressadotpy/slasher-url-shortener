@@ -11,8 +11,7 @@ defmodule Slasher.Accounts do
   end
 
   def list_users do
-    Users
-    |> Repo.all()
+    Repo.all(User)
   end
 
   def get_user!(id) do
@@ -65,22 +64,33 @@ defmodule Slasher.Accounts do
 
   alias Slasher.Accounts.Credential
 
+  @doc """
+  Search for a user with the specified email and preload the credential
+  association.
+  """
   def get_user_by_email(email) do
     from(u in User, join: c in assoc(u, :credential), where: c.email == ^email)
     |> Repo.one()
     |> Repo.preload(:credential)
   end
 
+  @doc """
+  Calls get_user_by_email to find a user with the given email and
+  checks if the password and email are a match.
+  """
   def authenticate_by_email_and_pass(email, given_pass) do
     user = get_user_by_email(email)
 
     cond do
+      # password matches email
       user && Comeonin.Pbkdf2.checkpw(given_pass, user.credential.password_hash) ->
         {:ok, user}
 
+      # password doesn't match email
       user ->
         {:error, :unauthorized}
 
+      # email doesn't exist
       true ->
         Comeonin.Pbkdf2.dummy_checkpw()
         {:error, :not_found}
@@ -96,6 +106,7 @@ defmodule Slasher.Accounts do
   def create_credential(attrs \\ %{}) do
     %Credential{}
     |> Credential.changeset(attrs)
+    |> Credential.registration_changeset()
     |> Repo.insert()
   end
 

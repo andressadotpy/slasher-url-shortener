@@ -23,7 +23,7 @@ defmodule SlasherWeb do
 
       import Plug.Conn
       import SlasherWeb.Gettext
-      import SlasherWeb.Auth, only: [authenticate_user: 2]
+      import SlasherWeb.Auth
       alias SlasherWeb.Router.Helpers, as: Routes
     end
   end
@@ -51,7 +51,7 @@ defmodule SlasherWeb do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
-      import SlasherWeb.Auth, only: [authenticate_user: 2]
+      import SlasherWeb.Auth
     end
   end
 

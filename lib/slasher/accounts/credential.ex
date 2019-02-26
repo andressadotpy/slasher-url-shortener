@@ -1,6 +1,7 @@
 defmodule Slasher.Accounts.Credential do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Comeonin.Argon2
 
   schema "credentials" do
     field :email, :string
@@ -27,16 +28,12 @@ defmodule Slasher.Accounts.Credential do
     |> validate_required([:password, :password_confirmation])
     |> validate_length(:password, min: 8)
     |> validate_confirmation(:password)
-    |> put_pass_hash()
+    |> hash_password()
   end
 
-  defp put_pass_hash(changeset) do
-    case changeset do
-      %Ecto.Changeset{valid?: true, changes: %{password: pass}} ->
-        put_change(changeset, :password_hash, Comeonin.Pbkdf2.hashpwsalt(pass))
+  def hash_password(%{valid?: false} = changeset), do: changeset
 
-      _ ->
-        changeset
-    end
+  def hash_password(%{valid?: true, changes: %{password: pass}} = changeset) do
+    put_change(changeset, :password_hash, Argon2.hashpwsalt(pass))
   end
 end

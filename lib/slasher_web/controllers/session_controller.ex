@@ -3,12 +3,15 @@ defmodule SlasherWeb.SessionController do
 
   alias SlasherWeb.Router.Helpers, as: Routes
 
-  # renders login form
   def new(conn, _) do
     render(conn, "new.html")
   end
 
-  # handle the form submission
+  @doc """
+  The create action get email and password from user's inputs and
+  calls login_by_email_and_pass to verify if the email and password
+  matches or if it's a wrong combination or if doesn't exists.
+  """
   def create(conn, %{"session" => %{"email" => email, "password" => pass}}) do
     case SlasherWeb.Auth.login_by_email_and_pass(conn, email, pass) do
       {:ok, conn} ->

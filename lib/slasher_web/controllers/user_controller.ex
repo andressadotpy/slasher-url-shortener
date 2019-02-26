@@ -1,10 +1,11 @@
 defmodule SlasherWeb.UserController do
   use SlasherWeb, :controller
 
+  import Plug.Conn
   alias Slasher.Accounts
   alias Slasher.Accounts.User
 
-  plug :authenticate_user when action in [:index, :show]
+  plug(:authenticate when action in [:index, :show])
 
   def index(conn, _params) do
     users = Accounts.list_users()
@@ -12,7 +13,7 @@ defmodule SlasherWeb.UserController do
   end
 
   def new(conn, _params) do
-    changeset = Accounts.change_registration(%User{}, %{})
+    changeset = Accounts.change_user(%User{})
     render(conn, "new.html", changeset: changeset)
   end
 
@@ -30,7 +31,7 @@ defmodule SlasherWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    user = Accounts.get_user!(id)
+    user = Accounts.get_user(id)
     render(conn, "show.html", user: user)
   end
 
@@ -61,5 +62,19 @@ defmodule SlasherWeb.UserController do
     conn
     |> put_flash(:info, "User deleted successfully.")
     |> redirect(to: Routes.user_path(conn, :index))
+  end
+
+  # If there's a current user, the authenticate function
+  # returns the connection. Otherwise, a flash message shows up
+  # and redirect back to page_path index.
+  defp authenticate(conn, _opts) do
+    if conn.assigns.current_user do
+      conn
+    else
+      conn
+      |> put_flash(:error, "Sorry, you must be logged in to access that page.")
+      |> redirect(to: Routes.page_path(conn, :index))
+      |> halt()
+    end
   end
 end
