@@ -1,6 +1,7 @@
 defmodule Slasher.Accounts.Credential do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Slasher.Repo
   alias Comeonin.Argon2
 
   schema "credentials" do
